@@ -318,9 +318,10 @@ class AnthropicDirectClient(LLMClient):
                 "thinking": {"type": "enabled", "budget_tokens": thinking_tokens}
             }
             temperature = 1
-            assert max_tokens >= 32_000 and thinking_tokens <= 8192, (
-                f"As a heuristic, max tokens {max_tokens} must be >= 32k and thinking tokens {thinking_tokens} must be < 8k"
-            )
+            if not (max_tokens >= 32_000 and thinking_tokens <= 8192):
+                raise AssertionError(
+                    f"As a heuristic, max tokens {max_tokens} must be >= 32k and thinking tokens {thinking_tokens} must be < 8k"
+                )
         else:
             extra_body = None
 

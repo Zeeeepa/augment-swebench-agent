@@ -276,7 +276,8 @@ try breaking down the task into smaller steps and call this tool multiple times.
         """
         self.complete_tool.reset()
         if resume:
-            assert self.dialog.is_user_turn()
+            if not self.dialog.is_user_turn():
+                raise AssertionError
         else:
             self.dialog.clear()
             self.interrupted = False

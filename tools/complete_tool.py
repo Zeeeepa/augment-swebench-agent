@@ -40,7 +40,8 @@ class CompleteTool(LLMTool):
         tool_input: dict[str, Any],
         dialog_messages: Optional[DialogMessages] = None,
     ) -> ToolImplOutput:
-        assert tool_input["answer"], "Model returned empty answer"
+        if not tool_input["answer"]:
+            raise AssertionError("Model returned empty answer")
         self.answer = tool_input["answer"]
         return ToolImplOutput("Task completed", "Task completed")
 

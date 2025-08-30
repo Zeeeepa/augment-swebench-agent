@@ -169,7 +169,8 @@ def normalize_indent(code: str | None, indent_type: IndentType) -> str | None:
     Raises:
         AssertionError: If the code contains mixed indentation or if indent_type is MIXED
     """
-    assert not indent_type.is_mixed, "Cannot normalize mixed indentation"
+    if indent_type.is_mixed:
+        raise AssertionError("Cannot normalize mixed indentation")
     if not code or not isinstance(code, str):
         return code
 
@@ -191,14 +192,17 @@ def normalize_indent(code: str | None, indent_type: IndentType) -> str | None:
         if indent_type.is_tab:
             indent_level = num_tabs
             remainder = num_spaces
-            assert line[: num_tabs + num_spaces] == "\t" * num_tabs + " " * num_spaces
+            if line[: num_tabs + num_spaces] != "\t" * num_tabs + " " * num_spaces:
+                raise AssertionError
         else:
             total_spaces = num_spaces + (num_tabs * indent_type.size)
             indent_level = total_spaces // indent_type.size
             remainder = total_spaces % indent_type.size
-            assert line[: num_tabs + num_spaces] == " " * (num_tabs + num_spaces)
+            if line[: num_tabs + num_spaces] != " " * (num_tabs + num_spaces):
+                raise AssertionError
 
-        assert remainder < 2, f"Unexpected remainder: {remainder} for line: {line}"
+        if remainder >= 2:
+            raise AssertionError(f"Unexpected remainder: {remainder} for line: {line}")
         new_indent = " " * (4 * indent_level) + " " * remainder
         normalized_line = new_indent + line.lstrip()
         normalized_lines.append(normalized_line)
@@ -221,7 +225,8 @@ def apply_indent_type(
     Returns:
         Code with the specified indentation type applied
     """
-    assert not indent_type.is_mixed, "Cannot apply mixed indentation"
+    if indent_type.is_mixed:
+        raise AssertionError("Cannot apply mixed indentation")
     if not code or not isinstance(code, str):
         return code
 
@@ -249,7 +254,8 @@ def apply_indent_type(
             indent_levels = num_tabs
             remainder = num_spaces
         else:
-            assert num_tabs == 0, f"Unexpected tab in line: {line}"
+            if num_tabs != 0:
+                raise AssertionError(f"Unexpected tab in line: {line}")
             indent_levels = num_spaces // original_indent_type.size
             remainder = num_spaces % original_indent_type.size
 

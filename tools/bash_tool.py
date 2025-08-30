@@ -301,7 +301,8 @@ Run commands in a bash shell
         # confirm no bad stuff happened
         try:
             echo_result = run_command(self.child, self.custom_prompt, "echo hello")
-            assert echo_result.strip() == "hello"
+            if echo_result.strip() != "hello":
+                raise AssertionError
         except Exception:
             self.child, self.custom_prompt = start_persistent_shell(self.timeout)
 

@@ -335,12 +335,14 @@ class DialogMessages:
         return json.dumps(json_serializable, indent=2)
 
     def _assert_user_turn(self):
-        assert self.is_user_turn(), "Can only add user prompts on user's turn"
+        if not self.is_user_turn():
+            raise AssertionError("Can only add user prompts on user's turn")
 
     def _assert_assistant_turn(self):
-        assert self.is_assistant_turn(), (
-            "Can only get/replace last user prompt on assistant's turn"
-        )
+        if not self.is_assistant_turn():
+            raise AssertionError(
+                "Can only get/replace last user prompt on assistant's turn"
+            )
 
 
 class Tool:
@@ -391,7 +393,8 @@ class LLMTool:
                 pending tool calls. They should end where it's the user's turn.
         """
         if dialog_messages:
-            assert dialog_messages.is_user_turn()
+            if not dialog_messages.is_user_turn():
+                raise AssertionError
 
         try:
             self._validate_tool_input(tool_input)

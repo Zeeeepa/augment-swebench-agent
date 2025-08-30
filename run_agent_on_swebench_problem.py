@@ -230,9 +230,10 @@ def main():
     ]
 
     # Get the number of examples to run
-    assert args.num_examples is None or args.num_examples <= len(examples), (
-        f"num_examples ({args.num_examples}) is greater than the number of examples in the shard ({len(examples)}). Either decrease num_examples or decrease the number of shards."
-    )
+    if not (args.num_examples is None or args.num_examples <= len(examples)):
+        raise AssertionError(
+            f"num_examples ({args.num_examples}) is greater than the number of examples in the shard ({len(examples)}). Either decrease num_examples or decrease the number of shards."
+        )
     num_examples = args.num_examples if args.num_examples is not None else len(examples)
     console.print(
         f"Running on {num_examples} examples from shard {args.shard_id} out of {args.shard_ct} shards."
