@@ -6,26 +6,26 @@ This script loads a SWE-bench problem, starts a Docker container for it,
 and runs the agent inside the container by calling cli.py.
 """
 
-from functools import partial
-import os
-import logging
-import threading
-import sys
-import json
 import argparse
-from pathlib import Path
-from multiprocessing import Pool, Manager
+import json
+import logging
+import os
+import sys
+import threading
 import time
-import numpy as np
+import uuid
+from functools import partial
+from multiprocessing import Manager, Pool
+from pathlib import Path
 
+import numpy as np
+from datasets import load_dataset
 from rich.console import Console
 from rich.panel import Panel
-from datasets import load_dataset
 
-from utils.docker_utils import MAX_DOCKER_CONCURRENCY, setup_workspace, stop_container
-from utils.common import generate_patch
 from cli import main as cli_main
-import uuid
+from utils.common import generate_patch
+from utils.docker_utils import MAX_DOCKER_CONCURRENCY, setup_workspace, stop_container
 from utils.swebench_eval_utils import get_dataset_name, run_evaluation
 
 

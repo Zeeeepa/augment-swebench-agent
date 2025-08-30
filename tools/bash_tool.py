@@ -8,17 +8,18 @@ It provides a simple interface for running shell commands and getting their outp
 It also supports command filters for transforming commands before execution.
 """
 
+import re
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+import pexpect
 
 from utils.common import (
     DialogMessages,
     LLMTool,
     ToolImplOutput,
 )
-import pexpect
-import re
-from abc import ABC, abstractmethod
 
 
 def start_persistent_shell(timeout: int):

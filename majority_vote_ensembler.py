@@ -15,11 +15,12 @@ import json
 import os
 import re
 import sys
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from tqdm import tqdm
 
 from prompts.ensembler_prompt import build_ensembler_prompt
-from utils.llm_client import get_client, TextPrompt
+from utils.llm_client import TextPrompt, get_client
 
 MAX_TOKENS = 16384
 TEMPERATURE = 0.0

@@ -1,6 +1,7 @@
 """Tool for indicating task completion."""
 
 from typing import Any, Optional
+
 from utils.common import (
     DialogMessages,
     LLMTool,
