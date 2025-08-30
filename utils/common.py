@@ -3,37 +3,34 @@
 import copy
 import json
 import logging
+import subprocess
 import time
 from dataclasses import dataclass, field
 from typing import Any, Optional, cast
-import subprocess
 
 import jsonschema
 from anthropic import BadRequestError
 from termcolor import colored
 from typing_extensions import final
 
-from utils.token_counter import (
-    ClaudeTokenCounter,
-)
 from utils.llm_client import (
     AnthropicRedactedThinkingBlock,
     AnthropicThinkingBlock,
-    ToolCall,
-    ToolFormattedResult,
-)
-from utils.llm_client import (
     AssistantContentBlock,
     GeneralContentBlock,
     LLMMessages,
     TextPrompt,
     TextResult,
+    ToolCall,
+    ToolFormattedResult,
     ToolParam,
+)
+from utils.token_counter import (
+    ClaudeTokenCounter,
 )
 
 ToolInputSchema = dict[str, Any]
 """A JSON schema describing the input to a tool."""
-
 
 RIGHT = ""  # "▶"
 LEFT = ""  # "◀"
@@ -335,12 +332,14 @@ class DialogMessages:
         return json.dumps(json_serializable, indent=2)
 
     def _assert_user_turn(self):
-        assert self.is_user_turn(), "Can only add user prompts on user's turn"
+        if not self.is_user_turn():
+            raise AssertionError("Can only add user prompts on user's turn")
 
     def _assert_assistant_turn(self):
-        assert self.is_assistant_turn(), (
-            "Can only get/replace last user prompt on assistant's turn"
-        )
+        if not self.is_assistant_turn():
+            raise AssertionError(
+                "Can only get/replace last user prompt on assistant's turn"
+            )
 
 
 class Tool:
@@ -391,7 +390,8 @@ class LLMTool:
                 pending tool calls. They should end where it's the user's turn.
         """
         if dialog_messages:
-            assert dialog_messages.is_user_turn()
+            if not dialog_messages.is_user_turn():
+                raise AssertionError
 
         try:
             self._validate_tool_input(tool_input)

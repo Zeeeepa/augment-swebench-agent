@@ -10,52 +10,28 @@ from typing import Any, Tuple, cast
 
 import anthropic
 import openai
-from anthropic import (
-    NOT_GIVEN as Anthropic_NOT_GIVEN,
-)
-from anthropic import (
-    APIConnectionError as AnthropicAPIConnectionError,
-)
-from anthropic import (
-    InternalServerError as AnthropicInternalServerError,
-)
-from anthropic import (
-    RateLimitError as AnthropicRateLimitError,
-)
+from anthropic import NOT_GIVEN as Anthropic_NOT_GIVEN
+from anthropic import APIConnectionError as AnthropicAPIConnectionError
+from anthropic import InternalServerError as AnthropicInternalServerError
+from anthropic import RateLimitError as AnthropicRateLimitError
 from anthropic._exceptions import (
     OverloadedError as AnthropicOverloadedError,  # pyright: ignore[reportPrivateImportUsage]
 )
-from anthropic.types import (
-    RedactedThinkingBlock as AnthropicRedactedThinkingBlock,
-)
-from anthropic.types import (
-    TextBlock as AnthropicTextBlock,
-)
-from anthropic.types import (
-    ThinkingBlock as AnthropicThinkingBlock,
-)
+from anthropic.types import RedactedThinkingBlock as AnthropicRedactedThinkingBlock
+from anthropic.types import TextBlock as AnthropicTextBlock
+from anthropic.types import ThinkingBlock as AnthropicThinkingBlock
 from anthropic.types import ToolParam as AnthropicToolParam
-from anthropic.types import (
-    ToolResultBlockParam as AnthropicToolResultBlockParam,
-)
-from anthropic.types import (
-    ToolUseBlock as AnthropicToolUseBlock,
-)
+from anthropic.types import ToolResultBlockParam as AnthropicToolResultBlockParam
+from anthropic.types import ToolUseBlock as AnthropicToolUseBlock
 from anthropic.types.message_create_params import (
     ToolChoiceToolChoiceAny,
     ToolChoiceToolChoiceAuto,
     ToolChoiceToolChoiceTool,
 )
 from dataclasses_json import DataClassJsonMixin
-from openai import (
-    APIConnectionError as OpenAI_APIConnectionError,
-)
-from openai import (
-    InternalServerError as OpenAI_InternalServerError,
-)
-from openai import (
-    RateLimitError as OpenAI_RateLimitError,
-)
+from openai import APIConnectionError as OpenAI_APIConnectionError
+from openai import InternalServerError as OpenAI_InternalServerError
+from openai import RateLimitError as OpenAI_RateLimitError
 from openai._types import (
     NOT_GIVEN as OpenAI_NOT_GIVEN,  # pyright: ignore[reportPrivateImportUsage]
 )
@@ -318,9 +294,10 @@ class AnthropicDirectClient(LLMClient):
                 "thinking": {"type": "enabled", "budget_tokens": thinking_tokens}
             }
             temperature = 1
-            assert max_tokens >= 32_000 and thinking_tokens <= 8192, (
-                f"As a heuristic, max tokens {max_tokens} must be >= 32k and thinking tokens {thinking_tokens} must be < 8k"
-            )
+            if not (max_tokens >= 32_000 and thinking_tokens <= 8192):
+                raise AssertionError(
+                    f"As a heuristic, max tokens {max_tokens} must be >= 32k and thinking tokens {thinking_tokens} must be < 8k"
+                )
         else:
             extra_body = None
 

@@ -1,6 +1,15 @@
+import logging
 from copy import deepcopy
 from typing import Any, Optional
+
+from rich.console import Console
+from termcolor import colored
+
+from prompts.system_prompt import SYSTEM_PROMPT
 from tools.bash_tool import create_bash_tool, create_docker_bash_tool
+from tools.complete_tool import CompleteTool
+from tools.sequential_thinking_tool import SequentialThinkingTool
+from tools.str_replace_tool import StrReplaceEditorTool
 from utils.common import (
     DialogMessages,
     LLMTool,
@@ -8,13 +17,6 @@ from utils.common import (
 )
 from utils.llm_client import LLMClient, TextResult
 from utils.workspace_manager import WorkspaceManager
-from tools.complete_tool import CompleteTool
-from prompts.system_prompt import SYSTEM_PROMPT
-from tools.str_replace_tool import StrReplaceEditorTool
-from tools.sequential_thinking_tool import SequentialThinkingTool
-from termcolor import colored
-from rich.console import Console
-import logging
 
 
 class Agent(LLMTool):
@@ -276,7 +278,8 @@ try breaking down the task into smaller steps and call this tool multiple times.
         """
         self.complete_tool.reset()
         if resume:
-            assert self.dialog.is_user_turn()
+            if not self.dialog.is_user_turn():
+                raise AssertionError
         else:
             self.dialog.clear()
             self.interrupted = False
