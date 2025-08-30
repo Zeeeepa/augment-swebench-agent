@@ -3,37 +3,34 @@
 import copy
 import json
 import logging
+import subprocess
 import time
 from dataclasses import dataclass, field
 from typing import Any, Optional, cast
-import subprocess
 
 import jsonschema
 from anthropic import BadRequestError
 from termcolor import colored
 from typing_extensions import final
 
-from utils.token_counter import (
-    ClaudeTokenCounter,
-)
 from utils.llm_client import (
     AnthropicRedactedThinkingBlock,
     AnthropicThinkingBlock,
-    ToolCall,
-    ToolFormattedResult,
-)
-from utils.llm_client import (
     AssistantContentBlock,
     GeneralContentBlock,
     LLMMessages,
     TextPrompt,
     TextResult,
+    ToolCall,
+    ToolFormattedResult,
     ToolParam,
+)
+from utils.token_counter import (
+    ClaudeTokenCounter,
 )
 
 ToolInputSchema = dict[str, Any]
 """A JSON schema describing the input to a tool."""
-
 
 RIGHT = ""  # "▶"
 LEFT = ""  # "◀"
