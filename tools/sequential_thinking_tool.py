@@ -277,7 +277,8 @@ You should:
 
             return ToolImplOutput(
                 tool_output=json.dumps(response, indent=2),
-                tool_result_message=f"Processed thought {validated_input['thoughtNumber']}/{validated_input['totalThoughts']}",  # pyright: ignore[reportTypedDictNotRequiredAccess]
+                # pyright: ignore[reportTypedDictNotRequiredAccess]
+                tool_result_message=f"Processed thought {validated_input['thoughtNumber']}/{validated_input['totalThoughts']}",
                 auxiliary_data={"thought_data": validated_input},
             )
         except Exception as e:

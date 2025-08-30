@@ -1,4 +1,3 @@
-import docker
 import logging
 import os
 import subprocess
@@ -6,6 +5,8 @@ import time
 import uuid
 from pathlib import Path
 from typing import Any, Dict, Tuple
+
+import docker
 
 AUGMENT_ROOT = Path(__file__).parent.parent
 MAX_DOCKER_CONCURRENCY = 4
@@ -77,7 +78,8 @@ def start_container(workspace: Path, problem_id: str, semaphore: Any) -> str:
             image=image_name,
             detach=True,
             volumes=["/testbed"],
-            command="bash -c 'git config --global user.email a && git config --global user.name a && git config --global --add safe.directory /testbed && git commit --allow-empty -am augment && sleep 7200'",  # Time out and die, eventually, if we are interrupted
+            # Time out and die, eventually, if we are interrupted
+            command="bash -c 'git config --global user.email a && git config --global user.name a && git config --global --add safe.directory /testbed && git commit --allow-empty -am augment && sleep 7200'",
         )
         logging.info(f"Finished startup for {image_name}")
     # Give it a second to start

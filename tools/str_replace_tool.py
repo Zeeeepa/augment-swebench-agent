@@ -5,22 +5,22 @@ https://www.anthropic.com/engineering/swe-bench-sonnet.
 """
 
 import asyncio
-from pathlib import Path
+import logging
 from collections import defaultdict
-from utils.indent_utils import (
-    match_indent,
-    match_indent_by_first_line,
-)
-from utils.workspace_manager import WorkspaceManager
+from pathlib import Path
+from typing import Any, Literal, Optional, get_args
+
 from utils.common import (
     DialogMessages,
     LLMTool,
     ToolCallParameters,
     ToolImplOutput,
 )
-
-from typing import Any, Literal, Optional, get_args
-import logging
+from utils.indent_utils import (
+    match_indent,
+    match_indent_by_first_line,
+)
+from utils.workspace_manager import WorkspaceManager
 
 logger = logging.getLogger(__name__)
 

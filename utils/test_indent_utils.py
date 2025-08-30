@@ -1,13 +1,14 @@
 """Tests for indentation utilities in file_edit_utils.py."""
 
 import pytest
+
 from utils.indent_utils import (
     IndentType,
+    apply_indent_type,
     detect_indent_type,
     detect_line_indent,
-    normalize_indent,
-    apply_indent_type,
     force_normalize_indent,
+    normalize_indent,
 )
 
 
@@ -214,7 +215,8 @@ class TestIndentUtils:
         # Code with tabs and spaces on same line but tabs first
         code = "def test():\n\t  print('mixed')"
         indent_type = detect_indent_type(code)
-        assert indent_type.is_mixed  # pyright: ignore[reportOptionalMemberAccess]
+        # pyright: ignore[reportOptionalMemberAccess]
+        assert indent_type.is_mixed
         assert (
             indent_type.most_used == IndentType.tab()  # pyright: ignore[reportOptionalMemberAccess]
         )  # Tab should be most used since it's the primary indent
@@ -501,7 +503,8 @@ class TestIndentUtils:
 
         # Tabs with spaces after (spaces are preserved)
         code = "def test():\n\t  print('mixed')\n\t  print('indent')"
-        expected = "def test():\n      print('mixed')\n      print('indent')"  # 4 spaces from tab + 2 original spaces
+        # 4 spaces from tab + 2 original spaces
+        expected = "def test():\n      print('mixed')\n      print('indent')"
         assert force_normalize_indent(code) == expected
 
         # Already using 4 spaces
@@ -607,7 +610,8 @@ class TestIndentUtils:
             result.append(i)
 \treturn result"""
         mixed_type = detect_indent_type(mixed_code)
-        assert mixed_type.is_mixed  # pyright: ignore[reportOptionalMemberAccess]
+        # pyright: ignore[reportOptionalMemberAccess]
+        assert mixed_type.is_mixed
         assert (
             mixed_type.most_used == IndentType.tab()  # pyright: ignore[reportOptionalMemberAccess]
         )  # More tab-indented lines (3 vs 2)

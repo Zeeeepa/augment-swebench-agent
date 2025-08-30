@@ -9,7 +9,8 @@ class IndentType:
 
     type: Literal["space", "tab", "mixed"]
     size: int = 4
-    most_used: "IndentType | None" = None  # Tracks predominant indent type for mixed
+    # Tracks predominant indent type for mixed
+    most_used: "IndentType | None" = None
 
     @property
     def is_tab(self) -> bool:

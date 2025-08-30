@@ -1,4 +1,5 @@
 from unittest.mock import MagicMock, patch
+
 from tools.str_replace_tool import StrReplaceEditorTool
 
 
@@ -452,15 +453,13 @@ def test_str_replace_with_indentation(tmp_path):
     test_file = tmp_path / "test_indentation.py"
 
     # Create a file with indented code
-    test_file.write_text(
-        """def main():
+    test_file.write_text("""def main():
     if True:
         print("Hello")
         if True:
             print("World")
         print("End")
-"""
-    )
+""")
 
     tool = StrReplaceEditorTool(
         workspace_manager=workspace_manager,
@@ -490,8 +489,7 @@ def test_str_replace_with_different_indentation_levels(tmp_path):
     test_file = tmp_path / "test_multi_indent.py"
 
     # Create a file with multiple indentation levels
-    test_file.write_text(
-        """def function():
+    test_file.write_text("""def function():
     # Level 1
     if condition_1:
         # Level 2
@@ -502,8 +500,7 @@ def test_str_replace_with_different_indentation_levels(tmp_path):
                 process(item)
             else:
                 skip(item)
-"""
-    )
+""")
 
     tool = StrReplaceEditorTool(
         workspace_manager=workspace_manager,
@@ -540,8 +537,7 @@ def test_str_replace_with_mixed_indentation(tmp_path):
     test_file = tmp_path / "test_mixed_indent.py"
 
     # Create a file with mixed tabs and spaces
-    test_file.write_text(
-        """def mixed_indentation():
+    test_file.write_text("""def mixed_indentation():
     # 4 spaces
     if condition:
         # 8 spaces
@@ -551,8 +547,7 @@ def test_str_replace_with_mixed_indentation(tmp_path):
         if value > threshold:
             # 12 spaces
             return value
-"""
-    )
+""")
 
     tool = StrReplaceEditorTool(
         workspace_manager=workspace_manager,
@@ -584,8 +579,7 @@ def test_str_replace_indentation_edge_cases(tmp_path):
     test_file = tmp_path / "test_indent_edge.py"
 
     # Create a file with some edge cases
-    test_file.write_text(
-        """def edge_cases():
+    test_file.write_text("""def edge_cases():
     # Empty lines between code
 
     if condition:
@@ -597,8 +591,7 @@ def test_str_replace_indentation_edge_cases(tmp_path):
       print("Two spaces")
         print("Four spaces")
           print("Six spaces")
-"""
-    )
+""")
 
     tool = StrReplaceEditorTool(
         workspace_manager=workspace_manager,
@@ -646,13 +639,11 @@ def test_str_replace_no_match_after_indentation_attempts(tmp_path):
     workspace_manager = build_ws_manager(tmp_path)
     test_file = tmp_path / "test_no_match.py"
 
-    test_file.write_text(
-        """def no_match():
+    test_file.write_text("""def no_match():
     print("This is some code")
     if condition:
         print("More code")
-"""
-    )
+""")
 
     tool = StrReplaceEditorTool(
         workspace_manager=workspace_manager,
